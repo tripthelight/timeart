@@ -1,9 +1,12 @@
 ### TIME ART
 ## CLOCK 1
 
+## import 문법으로 webpack 세팅 중
+
 # npm install
 - npm i express -s
 - npm i nodemon -g
+- npm i -D webpack webpack-cli
 
 # VSCODE EXTENSION
 - Live Sass Compiler
