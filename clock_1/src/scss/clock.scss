@@ -13,7 +13,6 @@ body {
   bottom: 0;
   width: calc(100vw / 1.6);
   height: calc(100vw / 1.6);
-  // border: 1px solid #FF0000;
   border-radius: calc(100vw / 1.6);
   box-shadow: rgba(0,0,0,0.09) 0 8px 24px;
   .inner {
@@ -66,5 +65,21 @@ body {
       transform-origin: bottom;
       transform: rotate(180deg);
     }
+  }
+  // center circle
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: calc(100vw / 50);
+    height: calc(100vw / 50);
+    border-radius: calc(100vw / 50);
+    background-color: #FFF;
+    box-shadow: rgba(0,0,0,0.09) 0 2px 2px inset;
   }
 }

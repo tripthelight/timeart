@@ -1,5 +1,8 @@
 'use strict';
 
+/**
+ * clock script
+*/
 function updateClock(hours, minutes, seconds) {
   let hourDegrees = hours * 30;
   let minuteDegrees = minutes * 6;
@@ -13,9 +16,7 @@ function updateClock(hours, minutes, seconds) {
   MINUTE.style.transform = `rotate(${minuteDegrees}deg)`;
   SECOND.style.transform = `rotate(${secondDegrees}deg)`;
 }
-
 setClockWithCurrentTime();
-
 function setClockWithCurrentTime() {
   let date = new Date();
   let hours = ((date.getHours() + 11) % 12 + 1);
@@ -23,5 +24,4 @@ function setClockWithCurrentTime() {
   let seconds = date.getSeconds();
   updateClock(hours, minutes, seconds);
 }
-
 setInterval(setClockWithCurrentTime, 1000);

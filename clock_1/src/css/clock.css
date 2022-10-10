@@ -67,4 +67,19 @@ body {
   background-color: #000;
   transform-origin: bottom;
   transform: rotate(180deg);
+}
+.clock::after {
+  content: "";
+  display: block;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 2vw;
+  height: 2vw;
+  border-radius: 2vw;
+  background-color: #FFF;
+  box-shadow: rgba(0, 0, 0, 0.09) 0 2px 2px inset;
 }/*# sourceMappingURL=clock.css.map */
