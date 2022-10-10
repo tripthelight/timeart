@@ -1,26 +1,9 @@
-// import fs from 'file-system';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// let htmlPageNames = [];
-// const pages = fs.readdirSync('./src');
-// pages.forEach(page => {
-//   if (page.endsWith('.html')) {
-//     htmlPageNames.push(page.split('.html')[0])
-//   }
-// });
-// let multipleHtmlPlugins = htmlPageNames.map(name => {
-//   return new HtmlWebpackPlugin({
-//     template: `./src/${name}.html`,
-//     filename: `${name}.html`, 
-//     chunks: [`${JSON.stringify(name)}`]
-//   })
-// });
-
 
 const config = {
   entry: './src/index.js',
@@ -64,14 +47,25 @@ const config = {
     ],
   },
   plugins: [
-    // ...multipleHtmlPlugins,
     new HtmlWebpackPlugin({ template: './src/index.html' }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin()
   ],
   devtool: 'eval-cheap-module-source-map',
   // devtool: 'source-map',// scss로 화면을 볼 경우
   target: 'web',
   devServer: {
+    // contentBase: path.resolve(dirname, 'dist'),
+    // compress: true,
+    // hot: false,
+    // historyApiFallback: true,
+    // liveReload: true,
+    // open: true,
+    // port: 5500,
+    // watchContentBase: true,
+    // watchOptions: {
+    //   poll: 1000,
+    //   ignored: /node_modules/,
+    // },
     static: {
       directory: path.join(dirname, 'dist'),
     },
