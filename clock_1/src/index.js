@@ -1,4 +1,6 @@
 import hello from "./hello.js";
-import './css/common.css'
+import clock from "./js/clock.js";
+import './scss/common.scss'
 
-hello();
+console.log(hello());
+clock();

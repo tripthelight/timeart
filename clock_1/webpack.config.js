@@ -27,9 +27,18 @@ const config = {
           { loader: MiniCssExtractPlugin.loader },
           {
             loader: 'css-loader',
-            options: { import: true },
+            options: { import: true, sourceMap: true },
           },
+        ]
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
         ],
+        exclude: /node_modules/
       },
       {
         test: /\.png$/,
@@ -41,19 +50,27 @@ const config = {
   devtool: 'eval-cheap-module-source-map',
   target: 'web',
   devServer: {
-    contentBase: path.resolve(dirname, 'dist'),
-    compress: true,
-    hot: false,
-    historyApiFallback: true,
-    liveReload: true,
-    open: true,
-    port: 5500,
-    watchContentBase: true,
-    watchOptions: {
-      poll: 1000,
-      ignored: /node_modules/,
+    // contentBase: path.resolve(dirname, 'dist'),
+    // compress: true,
+    // hot: false,
+    // historyApiFallback: true,
+    // liveReload: true,
+    // open: true,
+    // port: 5500,
+    // watchContentBase: true,
+    // watchOptions: {
+    //   poll: 1000,
+    //   ignored: /node_modules/,
+    // },
+    static: {
+      directory: path.join(dirname, 'dist'),
     },
+    port: 9000,
   },
+  watch: true,
+  watchOptions: {
+    ignored: /node_modules/
+  }
 };
 
 export default config;
