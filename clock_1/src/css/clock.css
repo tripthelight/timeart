@@ -1,0 +1,70 @@
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.clock {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 62.5vw;
+  height: 62.5vw;
+  border-radius: 62.5vw;
+  box-shadow: rgba(0, 0, 0, 0.09) 0 8px 24px;
+}
+.clock .inner {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 50vw;
+  height: 50vw;
+  border-radius: 50vw;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 8px 24px inset;
+}
+.clock .inner .hour {
+  position: absolute;
+  width: 1.1111111111vw;
+  height: 12.5vw;
+  margin: auto;
+  top: -25%;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #000;
+  transform-origin: bottom;
+  transform: rotate(0deg);
+}
+.clock .inner .minute {
+  position: absolute;
+  width: 0.6666666667vw;
+  height: 14.2857142857vw;
+  margin: auto;
+  top: -28%;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #000;
+  transform-origin: bottom;
+  transform: rotate(90deg);
+}
+.clock .inner .second {
+  position: absolute;
+  width: 0.5vw;
+  height: 16.6666666667vw;
+  margin: auto;
+  top: -32%;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #000;
+  transform-origin: bottom;
+  transform: rotate(180deg);
+}/*# sourceMappingURL=clock.css.map */
