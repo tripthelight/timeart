@@ -4,6 +4,7 @@
 ### EXECUTION ORDER
 
 ### NPN INSTALL
+- npm install express socket.io moment
 
 ### VSCODE EXTENSION
 - Live Sass Compiler
