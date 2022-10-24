@@ -1,0 +1,45 @@
+html, body {
+  width: 100%;
+  height: 100%;
+}
+#gameScene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#gameScene .tap-top,
+#gameScene .tap-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  cursor: pointer;
+}
+#gameScene .tap-top .count,
+#gameScene .tap-bottom .count {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  font-size: 48px;
+  color: #FFF;
+  text-align: center;
+}
+#gameScene .tap-top {
+  top: 0;
+  background-color: #000;
+}
+#gameScene .tap-top .count {
+  top: 0;
+  color: #FFF;
+}
+#gameScene .tap-bottom {
+  bottom: 0;
+  background-color: #FFF;
+}
+#gameScene .tap-bottom .count {
+  bottom: 0;
+  color: #000;
+}
