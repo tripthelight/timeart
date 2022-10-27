@@ -14,6 +14,10 @@ server.listen(PORT, () => console.log('Server is running: ' , PORT));
 
 io.on('connection', (socket) => {
   socket.on('taptap', (data) => {
-    io.emit('returnMessage', data);
+    const {name, cnt} = data;
+    io.emit('returnMessage', {
+      name,
+      cnt,
+    });
   });
 });
