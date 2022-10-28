@@ -1,7 +1,8 @@
 'use strict';
 
-// sessionStorage.setItem('taptapTcnt', 0);
-// sessionStorage.setItem('taptapBcnt', 0);
+localStorage.setItem('taptapTcnt', 0);
+localStorage.setItem('taptapBcnt', 0);
+localStorage.setItem('taptapClosed', false);
 
 /**
  * GLOBAL VARIABLE
@@ -40,26 +41,51 @@ const INTERJECTION =        document.querySelector('.interjection');
 const INTERJECTION_INNER =  document.querySelector('.interjection span');
 
 /**
- * BROWSER CLOSE or REFLESH
+ * GAME OVER
 */
-// window.addEventListener("beforeunload", function (e) {
-//   sessionStorage.setItem('taptapTcnt', 0);
-//   sessionStorage.setItem('taptapBcnt', 0);
-// });
+// not tap check
+var notTabGameOver;
+
+/**
+ * BROWSER CLOSE CHECK
+*/
+window.addEventListener('beforeunload', function (e) {});
+
+/**
+ * BROWSER REFRESH CHECK
+*/
+// if (window.performance) {
+//   // this is reload  
+//   console.info("window.performance works fine on this browser");
+// }
+// console.info(performance.navigation.type);
+if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+  // console.info( "This page is reloaded" );
+} else {
+  // window close
+  localStorage.setItem('taptapTcnt', 0);
+  localStorage.setItem('taptapBcnt', 0);
+  localStorage.setItem('taptapClosed', true);
+}
 
 /**
  * DOCUMENT READY
 */
 document.addEventListener('readystatechange', function(event) { 
   if (event.target.readyState === 'complete') {
-    console.log(sessionStorage.getItem('taptapBcnt'));
-    console.log(sessionStorage.getItem('taptapTcnt'));
-    if (sessionStorage.getItem('taptapBcnt') && sessionStorage.getItem('taptapTcnt').length) {
-      TAP_TOP_COUNT.value = sessionStorage.getItem('taptapTcnt');
-      TAP_BOTTOM_COUNT.value = sessionStorage.getItem('taptapBcnt');
-      handleValueChange();
+    // 만일 브라우저 종료 경험이 있으면
+    if (localStorage.getItem('taptapClosed') == 'true') {
+      // console.log('YOU DIE');
+      alert('YOU DIED');
+      // location.href = 'https://www.google.com/';
     } else {
-      readyInit();
+      if (localStorage.getItem('taptapBcnt') == '0' && localStorage.getItem('taptapTcnt') == '0') {
+        readyInit();
+      } else {
+        TAP_TOP_COUNT.value = localStorage.getItem('taptapTcnt');
+        TAP_BOTTOM_COUNT.value = localStorage.getItem('taptapBcnt');
+        handleValueChange();
+      }
     }
   }
 });
@@ -106,13 +132,18 @@ function readyCount() {
     if (ww < wh || ww == wh) READY_INNER.style.fontSize = Math.floor(ww / 3) + 'px';
     READY_INNER.innerText = 'TAP!';
   }, 3000);
-  setTimeout( function() { READY.classList.remove('active');READY.classList.remove('start'); }, 4000);
+  setTimeout( function() { 
+    READY.classList.remove('active');
+    READY.classList.remove('start');
+    window.clearTimeout(notTabGameOver);
+    notTabGameOver = window.setTimeout(function(){console.log('game over');},5000); 
+  }, 4000);
 }
 
 /**
  * TAP CLICK EVENT
 */
-document.addEventListener('click', function(event){if (!READY.classList.contains('active')) documentClickEvent(event)} , false);
+document.addEventListener('click', function(event){ if (!READY.classList.contains('active') && localStorage.getItem('taptapClosed') == 'false') documentClickEvent(event)} , false);
 function documentClickEvent(_event) {
   // circle animation
   // setTimeout(circleAnimation, 100, _event);
@@ -203,21 +234,25 @@ function Count(name, cnt) {
     if (nickname === this.name) {
       if (Number(TAP_BOTTOM_COUNT.value) == 0) {
         TAP_BOTTOM_COUNT.value = cnt;
-        sessionStorage.setItem('taptapBcnt', cnt);
+        localStorage.setItem('taptapBcnt', cnt);
       } else {
         TAP_BOTTOM_COUNT.value = Number(TAP_BOTTOM_COUNT.value) + 1;
-        sessionStorage.setItem('taptapBcnt', Number(TAP_BOTTOM_COUNT.value));
+        localStorage.setItem('taptapBcnt', Number(TAP_BOTTOM_COUNT.value));
       }
     } else {
       if (Number(TAP_TOP_COUNT.value) == 0) {
         TAP_TOP_COUNT.value = cnt;
-        sessionStorage.setItem('taptapTcnt', cnt);
+        localStorage.setItem('taptapTcnt', cnt);
       } else {
         TAP_TOP_COUNT.value = Number(TAP_TOP_COUNT.value) + 1;
-        sessionStorage.setItem('taptapTcnt', Number(TAP_TOP_COUNT.value));
+        localStorage.setItem('taptapTcnt', Number(TAP_TOP_COUNT.value));
       }
     }
     handleValueChange();
+    // clearTimeout(notTabGameOver);
+    // notTabGameOver();
+    window.clearTimeout(notTabGameOver);
+    notTabGameOver = window.setTimeout(function(){console.log('game over');},5000); 
   }
 }
 
@@ -241,6 +276,7 @@ function handleValueChange() {
   }
   timeout = true;
 }
+
 /**
  * RENDOM NAME
 */
