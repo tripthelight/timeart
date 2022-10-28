@@ -84,13 +84,16 @@ ul.circle {
   position: absolute;
   left: 0;
   top: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  z-index: 1000;
 }
 ul.circle li {
   position: absolute;
   width: 100px;
   height: 100px;
   border-radius: 100px;
-  opacity: 0;
 }
 ul.circle li:nth-child(1) {
   left: 0;
@@ -113,6 +116,11 @@ ul.circle.tap-top li {
 }
 ul.circle.tap-bottom li {
   background-color: #000;
+}
+ul.circle.active {
+  width: 100px;
+  height: 100px;
+  opacity: 1;
 }
 ul.circle.active li {
   animation-duration: leaner;

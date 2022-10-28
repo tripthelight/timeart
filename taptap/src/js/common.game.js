@@ -1,5 +1,8 @@
 'use strict';
 
+// sessionStorage.setItem('taptapTcnt', 0);
+// sessionStorage.setItem('taptapBcnt', 0);
+
 /**
  * GLOBAL VARIABLE
 */
@@ -8,7 +11,8 @@ const nickname = randomName(10);
 const IINTERJECTION = [
   'AWW',
   'YAY',
-  'OOH LA LA',
+  'NICE',
+  'OOH LA',
   'GOOD',
   'COOL',
   'HOORAY',
@@ -20,6 +24,7 @@ let wh = window.innerHeight;
 let cnt = 0;
 let ijNum = 0;
 let ijTxt = new String();
+let timeout = false;
 
 /**
  * HTML ELEMENT SELECTOR
@@ -35,11 +40,27 @@ const INTERJECTION =        document.querySelector('.interjection');
 const INTERJECTION_INNER =  document.querySelector('.interjection span');
 
 /**
+ * BROWSER CLOSE or REFLESH
+*/
+// window.addEventListener("beforeunload", function (e) {
+//   sessionStorage.setItem('taptapTcnt', 0);
+//   sessionStorage.setItem('taptapBcnt', 0);
+// });
+
+/**
  * DOCUMENT READY
 */
 document.addEventListener('readystatechange', function(event) { 
   if (event.target.readyState === 'complete') {
-    readyInit();
+    console.log(sessionStorage.getItem('taptapBcnt'));
+    console.log(sessionStorage.getItem('taptapTcnt'));
+    if (sessionStorage.getItem('taptapBcnt') && sessionStorage.getItem('taptapTcnt').length) {
+      TAP_TOP_COUNT.value = sessionStorage.getItem('taptapTcnt');
+      TAP_BOTTOM_COUNT.value = sessionStorage.getItem('taptapBcnt');
+      handleValueChange();
+    } else {
+      readyInit();
+    }
   }
 });
 
@@ -94,7 +115,15 @@ function readyCount() {
 document.addEventListener('click', function(event){if (!READY.classList.contains('active')) documentClickEvent(event)} , false);
 function documentClickEvent(_event) {
   // circle animation
-  circleAnimation(_event);
+  // setTimeout(circleAnimation, 100, _event);
+  let circleInt = setInterval(function() {
+    console.log('돌고있다');
+    if (timeout) {
+      clearInterval(circleInt);
+      circleAnimation(_event);
+      timeout = false;
+    }
+  }, 1);
 
   // request count
   requestCount();
@@ -104,13 +133,12 @@ function documentClickEvent(_event) {
 }
 // circle animation
 function circleAnimation(_event) {
-  if (_event.target.className == 'tap-top') {
-    CIRCLE.classList.remove('tap-bottom');
-    CIRCLE.classList.add('tap-top');
-  }
-  if (_event.target.className == 'tap-bottom') {
+  if (window.innerHeight - TAP_BOTTOM.clientHeight < _event.clientY) {
     CIRCLE.classList.remove('tap-top');
     CIRCLE.classList.add('tap-bottom');
+  } else {
+    CIRCLE.classList.remove('tap-bottom');
+    CIRCLE.classList.add('tap-top');
   }
   CIRCLE.style.left = (_event.clientX - 50) + 'px';
   CIRCLE.style.top = (_event.clientY - 50) + 'px';
@@ -173,9 +201,21 @@ function Count(name, cnt) {
   this.cnt = cnt;
   this.applyCnt = function() {
     if (nickname === this.name) {
-      TAP_BOTTOM_COUNT.value = cnt;
+      if (Number(TAP_BOTTOM_COUNT.value) == 0) {
+        TAP_BOTTOM_COUNT.value = cnt;
+        sessionStorage.setItem('taptapBcnt', cnt);
+      } else {
+        TAP_BOTTOM_COUNT.value = Number(TAP_BOTTOM_COUNT.value) + 1;
+        sessionStorage.setItem('taptapBcnt', Number(TAP_BOTTOM_COUNT.value));
+      }
     } else {
-      TAP_TOP_COUNT.value = cnt;
+      if (Number(TAP_TOP_COUNT.value) == 0) {
+        TAP_TOP_COUNT.value = cnt;
+        sessionStorage.setItem('taptapTcnt', cnt);
+      } else {
+        TAP_TOP_COUNT.value = Number(TAP_TOP_COUNT.value) + 1;
+        sessionStorage.setItem('taptapTcnt', Number(TAP_TOP_COUNT.value));
+      }
     }
     handleValueChange();
   }
@@ -199,6 +239,7 @@ function handleValueChange() {
     TAP_TOP.style.height = cntTop + '%';
     TAP_BOTTOM.style.height = cntBottom + '%';
   }
+  timeout = true;
 }
 /**
  * RENDOM NAME
