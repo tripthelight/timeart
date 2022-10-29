@@ -19,5 +19,5 @@
 - json pretty printer(ctrl + shift + j)
 ---
 ### YOUTUBE
-- https://www.youtube.com/watch?v=UoKoPP91Qx0&t=631s&ab_channel=%EB%8D%B0%EB%B8%8C%EB%A6%AC
-- 31:48
+- https://www.youtube.com/watch?v=bcnRbcVy3pU&list=PLrwNNiB6YOA1a0_xXvogmvSHrLcanVKkF&index=5&ab_channel=WebDevJourney
+- 9:22
