@@ -1,0 +1,179 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+#gameScene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+#gameScene .tap-top,
+#gameScene .tap-bottom {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  cursor: pointer;
+  overflow: hidden;
+}
+#gameScene .tap-top .count,
+#gameScene .tap-bottom .count {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  line-height: 100px;
+  font-size: 100px;
+  color: #FFF;
+  text-align: center;
+}
+#gameScene .tap-top {
+  top: 0;
+  background-color: #000;
+}
+#gameScene .tap-top .count {
+  top: 0;
+  color: #FFF;
+}
+#gameScene .tap-bottom {
+  bottom: 0;
+  background-color: #FFF;
+}
+#gameScene .tap-bottom .count {
+  bottom: 0;
+  color: #000;
+}
+.ready {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform-origin: center;
+  transform: translate(-50%, -50%);
+  background-color: #FF0000;
+  text-align: center;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+.ready.active {
+  animation-duration: leaner;
+  animation-iteration-count: 1;
+  animation-name: readyAnimation;
+  animation-duration: 4s;
+}
+@keyframes readyAnimation {
+  0% { opacity:0; transform: translate(-50%, -50%) scale(0,0); }
+  20% { opacity:1; transform: translate(-50%, -50%) scale(1,1); }
+  25% { opacity:0; transform: translate(-50%, -50%) scale(0,0); }
+  45% { opacity:1; transform: translate(-50%, -50%) scale(1,1); }
+  50% { opacity:0; transform: translate(-50%, -50%) scale(0,0); }
+  70% { opacity:1; transform: translate(-50%, -50%) scale(1,1); }
+  75% { opacity:0; transform: translate(-50%, -50%) scale(0,0); }
+  95% { opacity:1; transform: translate(-50%, -50%) scale(1.3,1.3); }
+  100% { opacity:0; transform: translate(-50%, -50%) scale(2,2); }
+}
+.ready span {
+  display: block;
+  color: #FFF;
+}
+ul.circle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  z-index: 1000;
+}
+ul.circle li {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+}
+ul.circle li:nth-child(1) {
+  left: 0;
+  top: 0;
+}
+ul.circle li:nth-child(2) {
+  left: 20px;
+  top: 20px;
+  width: 60px;
+  height: 60px;
+}
+ul.circle li:nth-child(3) {
+  left: 40px;
+  top: 40px;
+  width: 20px;
+  height: 20px;
+}
+ul.circle.tap-top li {
+  background-color: #FFF;
+}
+ul.circle.tap-bottom li {
+  background-color: #000;
+}
+ul.circle.active {
+  width: 100px;
+  height: 100px;
+  opacity: 1;
+}
+ul.circle.active li {
+  animation-duration: leaner;
+  animation-iteration-count: 1;
+  animation-direction: alternate;
+  animation-fill-mode: forwards;
+}
+ul.circle.active li:nth-child(1) {
+  animation-name: circleAnimation;
+  animation-duration: .1s;
+}
+ul.circle.active li:nth-child(2) {
+  animation-name: circleAnimation;
+  animation-duration: .2s;
+}
+ul.circle.active li:nth-child(3) {
+  animation-name: circleAnimation;
+  animation-duration: .3s;
+}
+@keyframes circleAnimation {
+  0% { opacity:0; transform: scale(0); }
+  50% { opacity:.5; transform: scale(.5); }
+  100% { opacity:0; transform: scale(1); }
+}
+.interjection {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 50%;
+  top: 50%;
+  width: 600px;
+  height: 600px;
+  border-radius: 600px;
+  margin: -300px 0 0 -300px;
+  text-align: center;
+  background-color: rgba(255,0,0,0.5);
+  opacity: 0;
+}
+.interjection span {
+  display: inline-block;
+  font-size: 100px;
+  line-height: 100px;
+  color: #FFF;
+}
+.interjection.active {
+  animation-duration: leaner;
+  animation-iteration-count: 1;
+  animation-name: interjectionAnimation;
+  animation-duration: .6s;
+}
+@keyframes interjectionAnimation {
+  0% { opacity:0; transform: scale(0); }
+  80% { opacity:1; transform: scale(1); }
+  100% { opacity:0; transform: scale(2); }
+}
