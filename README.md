@@ -1,5 +1,4 @@
 # TIME ART
----
 ### EXECUTION ORDER
 - nodemon server/server.js
 - localhost:5000
