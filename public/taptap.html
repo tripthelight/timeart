@@ -10,10 +10,16 @@
 </head>
 <body>
 
+  <!-- GAME SCENE -->
   <div id="gameScene">
     <div class="tap-top"><input type="text" id="topCount" class="count" value="0" readonly /></div>
     <div class="tap-bottom"><input type="text" id="bottomCount" class="count" value="0" readonly /></div>
   </div>
+
+  <!-- WAIT MATCHING -->
+  <ul class="matching waiting">
+    <li class="enemy"><span class="dot-l"></span>ENEMY<span class="dot-r"></span></li>
+    <li class="player">PLAYER</li></ul>
 
   <!-- READY -->
   <p class="ready"><span></span></p>
@@ -24,7 +30,10 @@
   <!-- INTERJECTION -->
   <p class="interjection"><span></span></p>
 
+  <!-- bg -->
+  <div class="bg show"></div>
+
   <script src="/socket.io/socket.io.js"></script>
-  <script src="./js/common.game.js"></script>
+  <script src="./js/taptap.js"></script>
 </body>
 </html>
