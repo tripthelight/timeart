@@ -1,0 +1,15 @@
+@media only screen and (min-width: 280px) {
+  .list form {
+    flex: 1 1 40%;
+  }
+}
+@media only screen and (min-width: 370px) {
+  .list form {
+    flex: 1 1 30%;
+  }
+}
+@media only screen and (min-width: 1000px) {
+  .list form {
+    flex: 1 1 10%;
+  }
+}

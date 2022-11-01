@@ -30,20 +30,33 @@ const INTERJECTION_INNER =  document.querySelector('.interjection span');
 */
 socket.on('connect', function() {
   console.log('Connect to TAP! TAP!');
-
-  enemyDotAni();
+  let searchQuery = window.location.search.substring(1);
+  let params = JSON.parse('{"' + decodeURI(searchQuery).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g,'":"') + '"}');
+  console.log('params : ', params);
+  
   // 요청
   // socket.emit('createMessage', {
   //   from: 'aaa',
   //   text: 'bbb'
   // });
 
-  // 응답 - enemy is comming
-  socket.on('newUserJoin', function(message) {
-    console.log('newUserJoin', message);
-    matching = false;
-    waitMatchingEnd();
+  socket.emit('join', params, function(err) {
+    if (err) {
+      alert(err);
+      window.location.href = '/';
+    } else {
+      console.log('No Error');
+      waitingName();
+      enemyDotAni();
+    }
   });
+});
+
+// 응답 - enemy is comming
+socket.on('newUserJoin', function(message) {
+  console.log('newUserJoin', message);
+  matching = false;
+  waitMatchingEnd();
 });
 
 socket.on('updateUsersList', function (users) {
@@ -52,6 +65,7 @@ socket.on('updateUsersList', function (users) {
 
   }
   if (users.length == 2) {
+    MATCHING_ENEMY.innerText = users[1];
     matching = false;
     waitMatchingEnd();
   }
@@ -60,7 +74,6 @@ socket.on('updateUsersList', function (users) {
 socket.on('disconnect', function() {
   console.log('DisConnect to TAP! TAP!');
 });
-
 
 // 응답
 socket.on('newMessage', function(message) {
@@ -74,6 +87,11 @@ socket.on('logoutMessage', function(message) {
 /**
  * WAIT MATCHING
 */
+// WATTING NAME
+function waitingName() {
+  let name = getParameterByName('name');
+  MATCHING_PLAYER.innerText = name;
+}
 // ENEMY DOT ANIMATION
 function enemyDotAni() {
   const DOT_ANI = setInterval(function() {
@@ -89,6 +107,13 @@ function waitMatchingEnd() {
   BG.classList.remove('show');
   MATCHING.classList.remove('waiting');
 }
+// SEARCH URL PARAMITER
+function getParameterByName(name) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+  results = regex.exec(location.search);
+  return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 /**
  * BROWSER REFRESH CHECK
@@ -102,7 +127,4 @@ if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
   // console.info( "This page is reloaded" );
 } else {
   // window close
-  localStorage.setItem('taptapTcnt', 0);
-  localStorage.setItem('taptapBcnt', 0);
-  localStorage.setItem('taptapClosed', true);
 }

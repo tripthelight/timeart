@@ -14,15 +14,17 @@ let app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
 let users = new Users();
-const roomData = loadJSON('./server/databases/taptap.json');
 
 app.use(express.static(publicPath));
 
+let i = 0;
+let testInt;
+
 io.on('connection', (socket) => {
+  if (i > 0) {
+    clearInterval(testInt);
+  }
   console.log('A new user just connect :)');
-  
-  // roomData.push({"name":"room77", "state":"false"});
-  // console.log('roomData >>> ', roomData);
   
   socket.on('join', (params, callback) => {
     console.log('join >>>>> ');
@@ -38,6 +40,9 @@ io.on('connection', (socket) => {
 
     callback();
   });
+
+  // io.to(params.room).emit('updateUsersList', users.getUserList(params.room));
+  // socket.broadcast.emit('newUserJoin', generateMessage('Admin', "New User Joined!"));
 
   // socket.emit('newMessage', generateMessage('Admin', 'Welcome to the Game ;)'));
   // socket.broadcast.emit('newUser', generateMessage('Admin', 'New User Join :)'));
@@ -56,6 +61,35 @@ io.on('connection', (socket) => {
       io.to(user.room).emit('updateUsersList', users.getUserList(user.room));
       io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left ${user.room} chat room.`))
     }
+
+    
+    // testInt = setInterval(() => {
+    //   i += 1;
+    //   console.log('타냐');
+    //   if (i > 30) {
+    //     clearInterval(testInt);
+    //     console.log('끝');
+
+    //     // console.log('key >>> ', values.key);
+    //     // console.log('value >>> ', values.value);
+    //     // values.key.forEach((keys, index) => {
+    //     //   let keyRes = keys.slice(0,keys.length-8);
+    //     //   let jsonUrl = `./server/databases/${keyRes}.json`;
+
+    //     //   let jsonData = loadJSON(jsonUrl);
+    //     //   if (jsonData.name == values.value[index]) {
+    //     //     if (jsonData.person == '2') {
+    //     //       jsonData.person = '1'
+    //     //     }
+    //     //     if (jsonData.person == '1') {
+    //     //       delete jsonData[index];
+    //     //     }
+    //     //   }
+      
+    //     //   saveJSON(jsonUrl, jsonData);
+    //     // });
+    //   }
+    // }, 100);
     // 상대방 로그아웃 메시지
     // socket.broadcast.emit('logoutMessage', {
     //   text: '상대방이 로그아웃함',
@@ -64,11 +98,19 @@ io.on('connection', (socket) => {
   });
 
   socket.on('roomState', (data) => {
+    let gameName = data.case;
+    let jsonUrl = '';
+    
+    switch (gameName) {
+      case 'taptap': jsonUrl = './server/databases/taptap.json';  break;
+      case 'blackandwhite': jsonUrl = './server/databases/blackandwhite.json';  break;
+    }
+    let roomData = loadJSON(jsonUrl);
     if (roomData.length == 0) {
       const roomName = randomName(10);
       roomData.push({"name":roomName, "state":"false", "person":"1"});
-      saveJSON('./server/databases/taptap.json', roomData);
-      socket.emit('roomStateRes', roomName);
+      saveJSON(jsonUrl, roomData);
+      socket.emit('roomStateRes', {roomName:roomName, gameName:gameName});
     } else {
       const selectRoom = roomData.map((rooms, index) => {
         if (rooms.person == '2') {
@@ -82,23 +124,37 @@ io.on('connection', (socket) => {
         }
       });
       
-      saveJSON('./server/databases/taptap.json', roomData);
-      socket.emit('roomStateRes', selectRoom);
+      saveJSON(jsonUrl, roomData);
+      socket.emit('roomStateRes', {roomName:selectRoom, gameName:gameName});
     }
-    // saveJSON('./server/databases/taptap.json', roomData);
-    // for (let i = 0; i < roomData.length; i++) {
-    //   if (roomData[i].name == selectRoom[0]) {
-    //     roomData[i].state = 'true';
-    //     break;
-    //   }
-    // }
   });
-});
 
-// data.forEach(item => {
-//   item.name = '111';
-//   item.state = 'false';
-// });
-// saveJSON('./server/databases/taptap.json', data);
+  socket.on('browserClose', (values) => {
+    console.log('browserClose >>>>>> ', values);
+    // console.log('key >>> ', values.key);
+    // console.log('value >>> ', values.value);
+    // values.key.forEach((keys, index) => {
+    //   let keyRes = keys.slice(0,keys.length-8);
+    //   let jsonUrl = `./server/databases/${keyRes}.json`;
+
+    //   let jsonData = loadJSON(jsonUrl);
+    //   if (jsonData.name == values.value[index]) {
+    //     if (jsonData.person == '2') {
+    //       jsonData.person = '1'
+    //     }
+    //     if (jsonData.person == '1') {
+    //       delete jsonData[index];
+    //     }
+    //   }
+  
+    //   saveJSON(jsonUrl, jsonData);
+    // });
+  });
+
+  // socket.on('disconnectState', (values) => {
+  //   console.log('disconnectState >>>>>> ');
+  // });
+
+});
 
 server.listen(PORT, () => console.log(`Serve is running: ${PORT}`));

@@ -2,7 +2,11 @@ let socket = io();
 
 let gameURL = window.location.protocol + "//" + window.location.host;
 let nickname = new String();
-// let roomNum = 0;
+
+
+window.sessionStorage.removeItem('taptaproomName');
+window.sessionStorage.removeItem('blackandwhiteroomName');
+
 
 if (localStorage.getItem('timeArtName')) {
   nickname = localStorage.getItem('timeArtName');
@@ -16,11 +20,10 @@ console.log('nickname : ', nickname);
 /**
  * HTML ELEMENT
 */
+const LOADING = document.querySelector('.loading');
 const NAME = document.querySelectorAll('input[name="name"');
 const ROOM = document.querySelectorAll('input[name="room"');
 const FORM_EL = document.querySelectorAll('form');
-const GAME_BTN = document.querySelectorAll('.btn-game');
-const LOADING = document.querySelector('.loading');
 
 /**
  * LOADING
@@ -33,7 +36,6 @@ const loadingState = {
     LOADING.classList.remove('show');
   }
 }
-
 loadingState.show();
 
 /**
@@ -49,6 +51,10 @@ if (NAME.length > 0) {
  * socket
  */
 socket.on('connect', function() {
+  for (let i = 0; i < ROOM.length; i++) {
+    ROOM[i].value = '';
+  }
+
   // request room
   // for (let i = 0; i < ROOM.length; i++) {
   //   ROOM[i].value = ROOM[i].value.slice(0, -1) + roomNum;
@@ -65,32 +71,63 @@ socket.on('connect', function() {
   //   from: 'aaa',
   //   text: 'bbb'
   // });
+
+  // socket.on('disconnect', function(data) {
+  //   console.log('DisConnect to Game : ', data);
+  //   // socket.emit('browserClose', {
+  //   //   key: Object.keys(sessionStorage),
+  //   //   value: Object.values(sessionStorage)
+  //   // });
+  // });
 });
 
-/** X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=X=
- * 새로고침 할 때 마다 인원수가 +1 됨
- */
 for (let i = 0; i < ROOM.length; i++) {
-  if (ROOM[i].value.length == 0) {
-    socket.emit('roomState', {
-      case: 'taptap',
-      state: 'false'
-    });
-  }
+  // if (
+  //   sessionStorage.getItem("taptaproomName") &&
+  //   sessionStorage.getItem("blackandwhiteroomName")
+  // ) {
+  //   if (ROOM[i].dataset.case == 'taptap') {
+  //     ROOM[i].value = sessionStorage.getItem("taptaproomName");
+  //   }
+  //   if (ROOM[i].dataset.case == 'blackandwhite') {
+  //     ROOM[i].value = sessionStorage.getItem("blackandwhiteroomName");
+  //   }
+  // } else {
+  //   socket.emit('roomState', {
+  //     case: ROOM[i].dataset.case,
+  //   });
+  // }
+  // console.log(sessionStorage);
+  // console.log(Object.keys(localStorage));
+  // console.log(Object.values(localStorage));
+  // console.log(Object.keys(sessionStorage));
+  // console.log(Object.values(sessionStorage));
+
 }
 
 socket.on('roomStateRes', function(data) {
-  loadingState.hide();
-
   for (let i = 0; i < ROOM.length; i++) {
     if (ROOM[i].value.length == 0) {
-      ROOM[i].value = data;
+      if (ROOM[i].dataset.case == 'taptap' && data.gameName == 'taptap') {
+        ROOM[i].value = data.roomName; 
+        sessionStorage.setItem('taptaproomName', data.roomName);
+      }
+      if (ROOM[i].dataset.case == 'blackandwhite' && data.gameName == 'blackandwhite') {
+        ROOM[i].value = data.roomName; 
+        sessionStorage.setItem('blackandwhiteroomName', data.roomName);
+      }
     }
   }
 });
 
+loadingState.hide();
+
 // socket.on('disconnect', function() {
-//   console.log('DisConnect to Server');
+//   console.log('DisConnect to Game : ');
+//   socket.emit('browserClose', {
+//     key: Object.keys(sessionStorage),
+//     value: Object.values(sessionStorage)
+//   });
 // });
 
 // // 응답
@@ -103,25 +140,6 @@ socket.on('roomStateRes', function(data) {
 // });
 
 /**
- * button click event
- */
-for (let i = 0; i < GAME_BTN.length; i++) {
-  GAME_BTN[i].addEventListener('click', gameBtnClick, false);
-}
-
-function gameBtnClick () {
-  // show loading
-  loadingState.show();
-
-  // request room
-  socket.emit('roomState', {
-    case: this.dataset.game,
-    state: 'false'
-  });
-}
-
-
-/**
  * RENDOM NAME
 */
 function randomName(lenth){
@@ -130,5 +148,29 @@ function randomName(lenth){
   let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   for( let i=0; i < lenth; i++ ) text += possible.charAt(Math.floor(Math.random() * possible.length));
   return text;
+}
+
+/**
+ * BROWSER REFRESH CHECK
+*/
+// if (window.performance) {
+//   // this is reload  
+//   console.info("window.performance works fine on this browser");
+// }
+// console.info(performance.navigation.type);
+if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+  // console.info( "This page is reloaded" );
+  // socket.emit('browserClose', {
+  //   key: Object.keys(sessionStorage),
+  //   value: Object.values(sessionStorage)
+  // });
+  // alert('refresh');
+} else {
+  // window close
+  // socket.emit('browserClose', {
+  //   key: Object.keys(sessionStorage),
+  //   value: Object.values(sessionStorage)
+  // });
+  // alert('close');
 }
 
