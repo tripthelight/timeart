@@ -5,6 +5,8 @@ const socketIO = require('socket.io');
 const {generateMessage} = require('./utils/message');
 const {isRealString} = require('./utils/isRealString');
 const {Users} = require('./utils/users');
+const {loadJSON, saveJSON} = require('./utils/databases');
+const {randomName} = require('./utils/randomName');
 
 const publicPath = path.join(__dirname, '/../public');
 const PORT = process.env.PORT || 3000;
@@ -12,13 +14,18 @@ let app = express();
 let server = http.createServer(app);
 let io = socketIO(server);
 let users = new Users();
+const roomData = loadJSON('./server/databases/taptap.json');
 
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
   console.log('A new user just connect :)');
-
+  
+  // roomData.push({"name":"room77", "state":"false"});
+  // console.log('roomData >>> ', roomData);
+  
   socket.on('join', (params, callback) => {
+    console.log('join >>>>> ');
     // console.log('socket.id : ', socket.id);
     socket.join(params.room);
     users.removeUser(socket.id);
@@ -55,6 +62,43 @@ io.on('connection', (socket) => {
     //   createAt: new Date().getTime()
     // })
   });
+
+  socket.on('roomState', (data) => {
+    if (roomData.length == 0) {
+      const roomName = randomName(10);
+      roomData.push({"name":roomName, "state":"false", "person":"1"});
+      saveJSON('./server/databases/taptap.json', roomData);
+      socket.emit('roomStateRes', roomName);
+    } else {
+      const selectRoom = roomData.map((rooms, index) => {
+        if (rooms.person == '2') {
+          const roomName = randomName(10);
+          roomData.push({"name":roomName, "state":"false", "person":"1"});
+          return roomName;
+        }
+        if (rooms.person == '1') {
+          rooms.person = '2';
+          return rooms.name;
+        }
+      });
+      
+      saveJSON('./server/databases/taptap.json', roomData);
+      socket.emit('roomStateRes', selectRoom);
+    }
+    // saveJSON('./server/databases/taptap.json', roomData);
+    // for (let i = 0; i < roomData.length; i++) {
+    //   if (roomData[i].name == selectRoom[0]) {
+    //     roomData[i].state = 'true';
+    //     break;
+    //   }
+    // }
+  });
 });
+
+// data.forEach(item => {
+//   item.name = '111';
+//   item.state = 'false';
+// });
+// saveJSON('./server/databases/taptap.json', data);
 
 server.listen(PORT, () => console.log(`Serve is running: ${PORT}`));

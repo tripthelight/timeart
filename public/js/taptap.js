@@ -29,30 +29,21 @@ const INTERJECTION_INNER =  document.querySelector('.interjection span');
  * SOCKET
 */
 socket.on('connect', function() {
-  console.log('Connect to Server');
+  console.log('Connect to TAP! TAP!');
 
   enemyDotAni();
-
-  let searchQuery = window.location.search.substring(1);
-  if (searchQuery.length > 0) {
-    let params = JSON.parse('{"' + decodeURI(searchQuery).replace(/&/g, '","').replace(/\+/g, ' ').replace(/=/g,'":"') + '"}');
-    MATCHING_PLAYER.innerText = params.name;
-
-    socket.emit('join', params, function(err) {
-      if(err){
-        alert(err);
-        window.location.href = '/';
-      }else {
-        console.log('No Error');
-      }
-    });
-  }
-  
   // 요청
   // socket.emit('createMessage', {
   //   from: 'aaa',
   //   text: 'bbb'
   // });
+
+  // 응답 - enemy is comming
+  socket.on('newUserJoin', function(message) {
+    console.log('newUserJoin', message);
+    matching = false;
+    waitMatchingEnd();
+  });
 });
 
 socket.on('updateUsersList', function (users) {
@@ -67,15 +58,10 @@ socket.on('updateUsersList', function (users) {
 })
 
 socket.on('disconnect', function() {
-  console.log('DisConnect to Server');
+  console.log('DisConnect to TAP! TAP!');
 });
 
-// 응답 - enemy is comming
-socket.on('newUserJoin', function(message) {
-  console.log('newUserJoin', message);
-  matching = false;
-  waitMatchingEnd();
-});
+
 // 응답
 socket.on('newMessage', function(message) {
   console.log('newMessage', message);
@@ -102,4 +88,21 @@ function enemyDotAni() {
 function waitMatchingEnd() {
   BG.classList.remove('show');
   MATCHING.classList.remove('waiting');
+}
+
+/**
+ * BROWSER REFRESH CHECK
+*/
+// if (window.performance) {
+//   // this is reload  
+//   console.info("window.performance works fine on this browser");
+// }
+// console.info(performance.navigation.type);
+if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+  // console.info( "This page is reloaded" );
+} else {
+  // window close
+  localStorage.setItem('taptapTcnt', 0);
+  localStorage.setItem('taptapBcnt', 0);
+  localStorage.setItem('taptapClosed', true);
 }
