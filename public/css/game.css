@@ -36,6 +36,45 @@ body {
   background-color: #EEE;
 }
 
+input[type="hidden"][data-case="blackandwhite"] + button {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  margin: 0 auto;
+}
+input[type="hidden"][data-case="blackandwhite"] + button span {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: calc(100% - 3px);
+  height: 30px;
+  font-size: 30px;
+  line-height: 30px;
+  margin-top: -15px;
+  z-index: 2;
+  background: linear-gradient(to right, #FFF calc((100% + 3px) / 2), #000 calc((100% - 3px) / 2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+input[type="hidden"][data-case="blackandwhite"] + button::before,
+input[type="hidden"][data-case="blackandwhite"] + button::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  top: 0;
+  z-index: 1;
+}
+input[type="hidden"][data-case="blackandwhite"] + button::before {
+  background-color: #000;
+  left: 0;
+}
+input[type="hidden"][data-case="blackandwhite"] + button::after {
+  background-color: #FFF;
+  right: 0;
+}
+
 .loading {
   display: none;
   position: fixed;

@@ -5,6 +5,7 @@
 ---
 ### NPN INSTALL
 - npm install express socket.io moment
+- npm i socket.io-client
 - npm install -g nodemon
 ---
 ### VSCODE EXTENSION
