@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INDEX</title>
+  </head>
+  <body>
+    <h2>Create Rooms</h2>
+    <input type="text" id="input-room-name" />
+    <button onclick="createRoom()">Create Room</button><br />
+
+    <script>
+      const rooms = '<%= rooms %>';
+      const roomsList = rooms.split(',');
+      function createRoom() {
+        let name = document.getElementById('input-room-name').value;
+        // document.body.innerHTML += `<a href="/room?name=${name}">${name}</a><br />`;
+        document.body.innerHTML += '<a href="/room?name=' + name + '">' + name + '</a><br />';
+        htmlGet(name);
+      }
+      function htmlGet(name) {
+        let xmlHttp = new XMLHttpRequest();
+        xmlHttp.open('GET', '/addRoom?name=' + name, false);
+        xmlHttp.send(null);
+        return xmlHttp.responseText;
+      }
+      for(const name of roomsList) {
+        if (name != '') {
+          document.body.innerHTML += '<a href="/room?name=' + name + '">' + name + '</a><br />';
+        }
+      }
+    </script>
+  </body>
+</html>

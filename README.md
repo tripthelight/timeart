@@ -6,6 +6,9 @@
 ### NPN INSTALL
 - npm install express socket.io moment
 - npm i socket.io-client
+- npm i ejs
+- npm i bcrypt
+- npm i @socket.io/admin-ui
 - npm install -g nodemon
 ---
 ### VSCODE EXTENSION
@@ -19,5 +22,5 @@
 - json pretty printer(ctrl + shift + j)
 ---
 ### YOUTUBE
-- https://www.youtube.com/watch?v=bcnRbcVy3pU&list=PLrwNNiB6YOA1a0_xXvogmvSHrLcanVKkF&index=5&ab_channel=WebDevJourney
-- 9:22
+- https://www.youtube.com/watch?v=oJg51RKdZ6g&ab_channel=Videmy
+- https://www.youtube.com/watch?v=5quLQ6NEOT0&list=PLZdwvOOinjFbzhZutEK9HvC56nicFXSpZ&index=1&ab_channel=SWIKbyMirTahaAli
